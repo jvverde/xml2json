@@ -59,7 +59,7 @@
 		<xsl:text>"</xsl:text>
 		<xsl:value-of select="name()"/>
 		<xsl:text>" : "</xsl:text>
-		<xsl:value-of select="."/>
+		<xsl:apply-templates select="." mode="escape"/>
 		<xsl:text>"</xsl:text>
 	</xsl:template>
 
@@ -69,7 +69,6 @@
 		<xsl:text>:[</xsl:text>
 		<xsl:for-each select="../text()[. != current()][normalize-space(.) != '']">
 			<xsl:text>"</xsl:text>
-			<!--xsl:value-of select="normalize-space(.)"/-->
 			<xsl:apply-templates select="." mode="escape"/>
 			<xsl:text>",</xsl:text>
 		</xsl:for-each>
@@ -83,7 +82,6 @@
 		<xsl:apply-templates select="." mode="tab"/>
 		<xsl:value-of select="name(..)"/>
 		<xsl:text>: "</xsl:text>
-		<!--xsl:value-of select="normalize-space(.)"/-->
 		<xsl:apply-templates select="." mode="escape"/>
 		<xsl:text>"</xsl:text>
 	</xsl:template>
@@ -96,7 +94,7 @@
 	
 
 	<!-- value mode -->
-	<xsl:template match="node()" mode="value">"<xsl:value-of select="."/>"</xsl:template>
+	<xsl:template match="node()" mode="value">"<xsl:apply-templates select="." mode="escape"/>"</xsl:template>
 
 	<xsl:template match="*[not(node()|@*)]" mode="value">null</xsl:template>
 
@@ -116,6 +114,8 @@
 			<xsl:text>	</xsl:text>
 		 </xsl:for-each>
 	</xsl:template>
+
+	<!-- tab mode -->
 	<xsl:template name="escape">
 		<xsl:param name="text"/>
 		<xsl:choose>
