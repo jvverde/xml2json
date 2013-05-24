@@ -4,13 +4,13 @@ using xalan
 
 $>xalan -in yourXMLSource.xml -xsl xml2json.xslt
 
-Don't Normalize text nodes
+Don't Normalize text nodes<br>
 $>xalan -param normalize 0 -in yourXMLSource.xml -xsl xml2json.xslt
 
-Include root node in the result 
+Include root node in the result<br> 
 $>xalan -param includeRoot 1 -in yourXMLSource.xml -xsl xml2json.xslt
 
-Include attributes of XML Schema intance namespace (http://www.w3.org/2001/XMLSchema-instance)  in the result 
+Include attributes of XML Schema intance namespace (http://www.w3.org/2001/XMLSchema-instance)  in the result<br> 
 $>xalan -param includexsiAttributes 1 -in yourXMLSource.xml -xsl xml2json.xslt
 
 Include tag's prefix names in the result 
