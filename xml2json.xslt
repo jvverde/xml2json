@@ -126,10 +126,14 @@
 	<xsl:template match="text()" mode="textNodeName">
 		<xsl:apply-templates select="." mode="tab"/>
 		<xsl:if test="$textNodeName">
+			<xsl:text>"</xsl:text>
 			<xsl:value-of select="$textNodeName"/>
+			<xsl:text>"</xsl:text>
 		</xsl:if>
 		<xsl:if test="not($textNodeName)">
+			<xsl:text>"</xsl:text>
 			<xsl:apply-templates select=".." mode="name"/>
+			<xsl:text>"</xsl:text>
 		</xsl:if>
 	</xsl:template>
 
