@@ -29,7 +29,8 @@
 	<xsl:param name="includeRoot" select="0"/>
 	<xsl:param name="includexsiAttributes" select="0"/>
 	<xsl:param name="removeNS" select="1"/>	
-	<xsl:param name="normalize" select="1"/>	
+	<xsl:param name="normalize" select="1"/>
+	<xsl:variable name="xsiNS" select="'http://www.w3.org/2001/XMLSchema-instance'"/>	
 	<xsl:template match="/">
 		<xsl:if test="$includeRoot">
 			<xsl:text>{</xsl:text>
@@ -78,7 +79,7 @@
 
 	<!-- atributte nodes -->
 	<xsl:template match="@*">
-		<xsl:for-each select="../@*[. != current()][$includexsiAttributes  or namespace-uri(.) != 'http://www.w3.org/2001/XMLSchema-instance']">
+		<xsl:for-each select="../@*[. != current()][$includexsiAttributes  or namespace-uri(.) != $xsiNS]">
 			<xsl:apply-templates select="." mode="xpto"/>
 			<xsl:apply-templates select="." mode="separator"/>
 		</xsl:for-each>
@@ -150,11 +151,15 @@
 	<xsl:template match="*[not(node()|@*)]" mode="value">null</xsl:template>
 
 	<xsl:template match="*[*|@*]" mode="value">
-		<xsl:text>{</xsl:text>
-		<xsl:apply-templates select="*|@*[$includexsiAttributes  or namespace-uri(.) != 'http://www.w3.org/2001/XMLSchema-instance'][last()]"/>
-		<xsl:apply-templates select="text()[normalize-space(.) != ''][last()]"/>
-		<xsl:apply-templates select="." mode="tab"/>
-		<xsl:text>}</xsl:text>
+		<xsl:variable name="cnt" select ="count(*|@*[$includexsiAttributes  or namespace-uri(.) != $xsiNS][last()])"/>
+		<xsl:if test="$cnt&gt;0">
+			<xsl:text>{</xsl:text>
+			<xsl:apply-templates select="*|@*[$includexsiAttributes  or namespace-uri(.) != $xsiNS][last()]"/>
+			<xsl:apply-templates select="text()[normalize-space(.) != ''][last()]"/>
+			<xsl:apply-templates select="." mode="tab"/>
+			<xsl:text>}</xsl:text>
+		</xsl:if>
+		<xsl:if test="$cnt = 0">"<xsl:apply-templates select="." mode="escape"/>"</xsl:if>	
 	</xsl:template>
 
 	<!-- tab mode -->
