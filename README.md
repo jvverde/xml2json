@@ -14,7 +14,7 @@ Include root node in the result
 
 	$>xalan -param includeRoot 1 -in yourXMLSource.xml -xsl xml2json.xslt
 
-Include attributes of XML Schema intance namespace (http://www.w3.org/2001/XMLSchema-instance)  in the result<br> 
+Include attributes of XMLSchema-instance namespace (http://www.w3.org/2001/XMLSchema-instance)  in the result<br> 
 
 	$>xalan -param includexsiAttributes 1 -in yourXMLSource.xml -xsl xml2json.xslt
 
@@ -22,7 +22,7 @@ Include tag's prefix names in the result
 
 	$>xalan -param removeNS 0 -in yourXMLSource.xml -xsl xml2json.xslt
 
-Define propertie name of text nodes (by default the parente node name is used). Please note the doubles quotes around single quotes
+Define propertie's name for text nodes (by default the parent node name is used). Please note the doubles quotes around single quotes
 
 	$>xalan -param textNodeName "'Content'" -in yourXMLSource.xml -xsl xml2json.xslt
 
