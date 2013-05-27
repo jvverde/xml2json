@@ -147,8 +147,9 @@
 
 	<!-- value mode -->
 	<xsl:template match="node()" mode="value">"<xsl:apply-templates select="." mode="escape"/>"</xsl:template>
+	<xsl:template match="node()[. = number(.)]" mode="value"><xsl:value-of select="."/></xsl:template>
 
-	<xsl:template match="*[not(node()|@*)]" mode="value">null</xsl:template>
+	<xsl:template match="*[not(node()|@*)]" mode="value" priority="5">null</xsl:template>
 
 	<xsl:template match="*[*|@*]" mode="value">
 		<xsl:variable name="cnt" select ="count(*|@*[$includexsiAttributes  or namespace-uri(.) != $xsiNS][last()])"/>

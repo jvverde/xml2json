@@ -45,6 +45,7 @@ sub doit{
 	eval{
 		my $results = $stylesheet->transform_file($xml,%param);
 		#print $results;
+		binmode STDOUT;
 		print $stylesheet->output_as_bytes($results);
 	};
 	warn $@ if $@;
