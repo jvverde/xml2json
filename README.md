@@ -26,6 +26,10 @@ Define propertie's name for text nodes (by default the parent node name is used)
 
 	$>xalan -param textNodeName "'Content'" -in yourXMLSource.xml -xsl xml2json.xslt
 
+Force some elements with numeric values to be represente as text. In the example bellow the elements saf:CustomerID and saf:ProductCode will be represented as text
+
+	$>xalan -param forceText 'saf:CustomerID saf:ProductCode' -in yourXMLSource.xml -xsl xml2json.xslt
+
 Combining all the options
 
 	$>xalan  -param normalize 0 -param includeRoot 1 -param includexsiAttributes 1 -param removeNS 0 -param textNodeName "'Content'" -in yourXMLSource.xml -xsl xml2json.xslt

@@ -30,6 +30,7 @@
 	<xsl:param name="includexsiAttributes" select="0"/>
 	<xsl:param name="removeNS" select="1"/>	
 	<xsl:param name="normalize" select="1"/>
+	<xsl:param name="forceText" select="''"/>
 	<xsl:variable name="xsiNS" select="'http://www.w3.org/2001/XMLSchema-instance'"/>	
 	<xsl:template match="/">
 		<xsl:if test="$includeRoot">
@@ -147,7 +148,13 @@
 
 	<!-- value mode -->
 	<xsl:template match="node()" mode="value">"<xsl:apply-templates select="." mode="escape"/>"</xsl:template>
-	<xsl:template match="node()[. = number(.)]" mode="value"><xsl:value-of select="."/></xsl:template>
+	<xsl:template match="node()[. = number(.)]" mode="value">
+		<xsl:call-template name="shouldIforceText">
+			<xsl:with-param name="expression" select="$forceText"/>
+			<xsl:with-param name="nodeName" select="name(.)"/>
+			<xsl:with-param name="nodeValue" select="."/>
+		</xsl:call-template>	
+	</xsl:template>
 
 	<xsl:template match="*[not(node()|@*)]" mode="value" priority="5">null</xsl:template>
 
@@ -175,7 +182,29 @@
 		</xsl:if>
 	</xsl:template>
 
-	<!-- tab mode -->
+	<!-- forceText -->
+	<xsl:template name="shouldIforceText">
+		<xsl:param name="nodeName"/>
+		<xsl:param name="nodeValue"/>
+		<xsl:param name="expression"/>
+		<xsl:variable name="b" select="substring-before($expression, ' ')"/>
+		<xsl:variable name="a" select="substring-after($expression, ' ')"/>
+		<xsl:choose>
+			<xsl:when test="$b = $nodeName or $expression = $nodeName">"<xsl:value-of select="$nodeValue"/>"</xsl:when>
+			<xsl:when test="contains($a,$nodeName)">
+				<xsl:call-template name="shouldIforceText">
+					<xsl:with-param name="expression" select="$a"/>
+					<xsl:with-param name="nodeName" select="$nodeName"/>
+					<xsl:with-param name="nodeValue" select="$nodeValue"/>
+				</xsl:call-template>							
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$nodeValue"/>
+			</xsl:otherwise>
+		</xsl:choose>		
+	</xsl:template>
+
+	<!-- escape -->
 	<xsl:template name="escape">
 		<xsl:param name="text"/>
 		<xsl:choose>
