@@ -5,7 +5,7 @@ use Data::Dumper;
 use JSON;
 use XML::LibXSLT;
 use XML::LibXML;
-use  Getopt::Long;
+use Getopt::Long;
 
 $\ ="\n";
 my %param = ();
@@ -25,9 +25,9 @@ my $style_src = XML::LibXML->load_xml(location=>$xsl, no_cdata=>1);
 
 my $stylesheet = $xslt->parse_stylesheet($style_src);
 
-if (-e $src and -f $src){
+if (-e $src and -f $src){ #if $src is a file
 	doit $src;
-}elsif(-d $src){
+}elsif(-d $src){	#if $src is a directory
 	my $re = qr/$filter/;
 	opendir DIR, $src or die qq|Impossible to open $src|;
 	my @files = grep {/$re/} grep {-f qq|$src/$_|} readdir DIR;
@@ -35,8 +35,8 @@ if (-e $src and -f $src){
 	foreach (@files){
 		my $in = qq|$src/$_|;
 		my $out = $in;
-		$out =~ s/$re/.json/;
-		open STDOUT, qq|>$out|;
+		$out =~ s/$re/.json/;   
+		open STDOUT, qq|>$out|; #redirect stdout
 		doit $in;
 	}	
 }
